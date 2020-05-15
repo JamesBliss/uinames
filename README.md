@@ -1,94 +1,101 @@
-uinames.com
-=======
+# Example app with styled-components
 
-This is the repo for [uinames.com](https://uinames.com). Feel free to contribute to the project by adding names. Keep in mind that more isn't better. Quality over quantity. Quality being the most common/popular names in a region.
+This example features how you use a different styling solution than [styled-jsx](https://github.com/zeit/styled-jsx) that also supports universal styles. That means we can serve the required styles for the first render within the HTML and then load the rest in the client. In this case we are using [styled-components](https://github.com/styled-components/styled-components).
 
-### The Algorithm
-When the option to pick a region at random is selected, a region will be picked based on the amount of possible name-combinations for that region. A region with more names is more likely to be picked, and regions with less names are less likely to be picked. I propose having a maximum of 100 male names, 100 female names and 300 last names per region. That's 60.000 possible combinations per region.
+For this purpose we are extending the `<Document />` and injecting the server side rendered styles into the `<head>`, and also adding the `babel-plugin-styled-components` (which is required for server side rendering). Additionally we set up a global [theme](https://www.styled-components.com/docs/advanced#theming) for styled-components using NextJS custom [`<App>`](https://nextjs.org/docs#custom-app) component.
 
-### The Layout (JSON)
-    [
-      {
-        "region": "Region",
-        "male": ["Male", "First", "Names"],
-        "female": ["Female", "First", "Names"],
-        "surnames": ["Last", "Names"]
-      },
-      {etc}
-    ]
+## Deploy your own
 
-### The API
-All responses are returned as JSON(P) over HTTP(S). There is currently no request limit. However, please keep the amount of requests to a minimum, and cache responses whenever possible.
+Deploy the example using [Vercel](https://vercel.com):
 
-#### Basic usage
-    https://uinames.com/api/
-    ---
-    {
-      "name":"John",
-      "surname":"Doe",
-      "gender":"male",
-      "region":"United States"
-    }
-#### Optional Parameters
-Number of names to return, between `1` and `500`:
-<pre>https://uinames.com/api/<strong>?amount=25</strong></pre>
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/zeit/next.js/tree/canary/examples/with-styled-components)
 
-Limit results to the `male` or `female` gender:
-<pre>https://uinames.com/api/<strong>?gender=female</strong></pre>
+## How to use
 
-Region-specific results:
-<pre>https://uinames.com/api/<strong>?region=germany</strong></pre>
+### Using `create-next-app`
 
-Require a minimum number of characters in a name:
-<pre>https://uinames.com/api/<strong>?minlen=25</strong></pre>
+Execute [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
 
-Require a maximum number of characters in a name:
-<pre>https://uinames.com/api/<strong>?maxlen=75</strong></pre>
+```bash
+npm init next-app --example with-styled-components with-styled-components-app
+# or
+yarn create next-app --example with-styled-components with-styled-components-app
+```
 
-For JSONP, specify a callback function to wrap results in:
-<pre>https://uinames.com/api/<strong>?callback=example</strong></pre>
+### Download manually
 
-#### Extra Data
-Additional random data is served to requests passing an `ext` parameter. However, response times may be slower, especially when requesting larger quantities of data.
-All photos are hand-picked from [unsplash.com](https://unsplash.com) ([license](https://unsplash.com/license)):
-<pre>
-https://uinames.com/api/<strong>?ext</strong>
----
-{
-  "name": "John",
-  "surname": "Doe",
-  "gender": "male",
-  "region": "United States",
-  "age": 29,
-  "title": "mr",
-  "phone": "(123) 456 7890",
-  "birthday": {
-  "dmy": "19/06/1987", // day, month, year
-  "mdy": "06/19/1987", // month, day, year
-  "raw": 551062610 // UNIX timestamp
-  },
-  "email": "john.doe@example.com",
-  "password": "Doe87(!",
-  "credit_card": {
-    "expiration": "12/20",
-    "number": "1234-5678-1234-5678",
-    "pin": 1234,
-    "security": 123
-  },
-  "photo": "https://uinames.com/api/photos/male/1.jpg"
-}
-</pre>
-#### Exception handling
-Error messages have the following format:
-<pre>{"error":"Region or language not found"}</pre>
+Download the example:
 
-### Author
-This project is initiated and maintained by [@thomweerd](https://twitter.com/thomweerd).
+```bash
+curl https://codeload.github.com/zeit/next.js/tar.gz/canary | tar -xz --strip=2 next.js-canary/examples/with-styled-components
+cd with-styled-components
+```
 
-### Credit
-This massive collection of names wouldn't have been as complete without the help of [these wonderful people](https://github.com/thm/uinames/network/members). Thanks for all the contributions and the continued support!
+Install it and run:
 
-Special thanks to [Claudio Albertin](https://github.com/ClaudioAlbertin) for his work on the API.
+```bash
+npm install
+npm run dev
+# or
+yarn
+yarn dev
+```
 
-### License
-Parts of this repository are licensed. Except where otherwise stated, any code not covered by this license is published under exclusive copyright. See [LICENSE.md](LICENSE.md) to learn more.
+Deploy it to the cloud with [Vercel](https://vercel.com/import?filter=next.js&utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+
+### Try it on CodeSandbox
+
+[Open this example on CodeSandbox](https://codesandbox.io/s/github/zeit/next.js/tree/canary/examples/with-styled-components)
+
+### Notes
+
+When wrapping a [Link](https://nextjs.org/docs/api-reference/next/link) from `next/link` within a styled-component, the [as](https://styled-components.com/docs/api#as-polymorphic-prop) prop provided by `styled` will collide with the Link's `as` prop and cause styled-components to throw an `Invalid tag` error. To avoid this, you can either use the recommended [forwardedAs](https://styled-components.com/docs/api#forwardedas-prop) prop from styled-components or use a different named prop to pass to a `styled` Link.
+
+<details>
+<summary>Click to expand workaround example</summary>
+<br />
+
+**components/StyledLink.js**
+
+```javascript
+import React from 'react'
+import Link from 'next/link'
+import styled from 'styled-components'
+
+const StyledLink = ({ as, children, className, href }) => (
+  <Link href={href} as={as} passHref>
+    <a className={className}>{children}</a>
+  </Link>
+)
+
+export default styled(StyledLink)`
+  color: #0075e0;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    color: #40a9ff;
+  }
+
+  &:focus {
+    color: #40a9ff;
+    outline: none;
+    border: 0;
+  }
+`
+```
+
+**pages/index.js**
+
+```javascript
+import React from 'react'
+import StyledLink from '../components/StyledLink'
+
+export default () => (
+  <StyledLink href="/post/[pid]" forwardedAs="/post/abc">
+    First post
+  </StyledLink>
+)
+```
+
+</details>
