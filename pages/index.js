@@ -13,7 +13,6 @@ export default () => {
   const regions = data.map(v => v.region);
   const randomRegion = randomItem(regions).toLowerCase();
   const foundRegions = data.filter(v => v.region.toLowerCase() === randomRegion.toLowerCase())[0]
-
   const results = Array.apply(null, Array(11));
 
   return (
@@ -24,7 +23,6 @@ export default () => {
         </Link>
       </h1>
       {results.map((item, index) => {
-        console.log('ht')
         const firstName = randomItem(foundRegions.firstNames);
         const surname = randomItem(foundRegions.surnames);
         return <p key={index}>{firstName} {surname}</p>

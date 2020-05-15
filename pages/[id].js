@@ -22,7 +22,6 @@ const Selection = () => {
     <>
       <h1>Selection: {id}</h1>
       {results.map((item, index) => {
-        console.log('ht')
         const firstName = randomItem(foundRegions.firstNames);
         const surname = randomItem(foundRegions.surnames);
         return <p key={index}>{firstName} {surname}</p>
