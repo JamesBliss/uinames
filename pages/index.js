@@ -6,14 +6,21 @@ import data from '../data/names.json';
 
 // helpers
 const randomItem = arr => arr[(Math.random() * arr.length) | 0];
-const fetcher = url => fetch(url).then(res => res.json())
+const regions = data.map(v => v.region);
+
+export const GenerateLists = (region) => {
+  const foundRegions = data.filter(v => v.region.toLowerCase() === region.toLowerCase())[0]
+  const results = Array.apply(null, Array(11));
+  return results.map((item, index) => {
+      const firstName = randomItem(foundRegions.firstNames);
+      const surname = randomItem(foundRegions.surnames);
+      return <p key={index}>{firstName} {surname}</p>
+    })
+}
 
 export default () => {
-  // mapping
-  const regions = data.map(v => v.region);
   const randomRegion = randomItem(regions).toLowerCase();
-  const foundRegions = data.filter(v => v.region.toLowerCase() === randomRegion.toLowerCase())[0]
-  const results = Array.apply(null, Array(11));
+  const [list, setList] = React.useState(GenerateLists(randomRegion));
 
   return (
     <>
@@ -22,16 +29,12 @@ export default () => {
           <a>{randomRegion}</a>
         </Link>
       </h1>
-      {results.map((item, index) => {
-        const firstName = randomItem(foundRegions.firstNames);
-        const surname = randomItem(foundRegions.surnames);
-        return <p key={index}>{firstName} {surname}</p>
-      })}
+      { list }
       <br />
       <br />
       <br />
       <br />
-      <button onClick={() => window.location.href = '/'}>Another!</button>
+      <button onClick={() => setList(GenerateLists(randomItem(regions).toLowerCase()))}>Another!</button>
     </>
   )
 };
